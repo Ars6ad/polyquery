@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Polyquery Response Comparison</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4882F",
+                        "primary-dark": "#B87627",
+                        "primary-light": "#E9AE61",
+                        "background-dark": "#1A1A1A",
+                        "surface-dark": "#2C2C2C",
+                        "surface-border": "#474747",
+                        "text-secondary": "#A8A8A8",
+                        "code-bg": "#232323",
+                        "code-border": "#474747",
+                        "light-grey": "#D1D1D1",
+                        "muted-grey": "#7D7D7D",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-background-dark text-light-grey font-display overflow-hidden h-screen flex">
+    
+    <!-- Sidebar -->
+    <aside class="collapsed w-64 h-full bg-background-dark border-r border-surface-border flex flex-col justify-between p-4 shrink-0 transition-all duration-300 md:flex hidden md:translate-x-0 -translate-x-full absolute md:relative z-50" id="sidebar">
+        <div class="flex flex-col gap-6 w-full min-w-[14rem]">
+            <div class="flex flex-col px-2">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-2xl">all_inclusive</span>
+                        </div>
+                        <h1 class="text-light-grey text-xl font-bold leading-normal tracking-tight">Polyquery</h1>
+                    </div>
+                    <button class="md:hidden text-light-grey hover:text-white" onclick="toggleSidebar()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <p class="text-text-secondary text-xs font-normal leading-normal mt-1 pl-11">v1.0.4 • Pro</p>
+            </div>
+            
+            <button class="flex items-center gap-3 px-4 py-3 rounded-full bg-primary hover:bg-primary-dark transition-colors group">
+                <span class="material-symbols-outlined text-background-dark group-hover:scale-110 transition-transform">add_circle</span>
+                <p class="text-background-dark text-sm font-bold leading-normal">New Comparison</p>
+            </button>
+            
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors" href="#">
+                    <span class="material-symbols-outlined text-[20px]">search</span>
+                    <p class="text-sm font-medium">Search</p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors" href="#">
+                    <span class="material-symbols-outlined text-[20px]">history</span>
+                    <p class="text-sm font-medium">History</p>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors" href="#">
+                    <span class="material-symbols-outlined text-[20px]">settings</span>
+                    <p class="text-sm font-medium">Settings</p>
+                </a>
+            </nav>
+            
+            <div class="flex flex-col gap-2 mt-4 px-3">
+                <p class="text-text-secondary text-xs font-semibold uppercase tracking-wider mb-2">Recent</p>
+                <div class="text-sm text-light-grey/70 truncate hover:text-light-grey cursor-pointer py-1">React vs Vue performance...</div>
+                <div class="text-sm text-light-grey/70 truncate hover:text-light-grey cursor-pointer py-1">Python script for data...</div>
+                <div class="text-sm text-light-grey/70 truncate hover:text-light-grey cursor-pointer py-1">Translate to French...</div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col gap-4 w-full min-w-[14rem]">
+            <div class="h-px bg-surface-border w-full"></div>
+            <button class="flex w-full cursor-pointer items-center justify-start gap-3 rounded-full p-2 hover:bg-surface-border transition-colors">
+                <div class="size-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500" data-alt="User profile avatar gradient"></div>
+                <div class="flex flex-col items-start">
+                    <span class="text-sm font-bold text-light-grey">Alex Morgan</span>
+                    <span class="text-xs text-text-secondary">Free Plan</span>
+                </div>
+            </button>
+        </div>
+    </aside>
+    
+    <!-- Model Selector -->
+    <aside class="collapsed w-56 h-full bg-background-dark border-r border-surface-border flex flex-col p-4 shrink-0 transition-all duration-300 relative z-40" id="model-selector">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-light-grey text-lg font-bold">Models</h3>
+            <button class="text-light-grey hover:text-white" onclick="toggleModelSelector()" title="Collapse model selector">
+                <span class="material-symbols-outlined text-lg">arrow_back_ios_new</span>
+            </button>
+        </div>
+        
+        <div class="flex flex-col gap-4 overflow-y-auto flex-1">
+            <label class="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <input checked="" class="text-primary-light border-surface-border" style="--primary: #D4882F;" type="checkbox"/>
+                    <p class="text-sm font-medium">GPT-4o</p>
+                </div>
+                <span class="material-symbols-outlined text-text-secondary hover:text-light-grey text-[18px] cursor-grab">drag_handle</span>
+            </label>
+            <label class="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <input checked="" class="text-primary-light border-surface-border" style="--primary: #D4882F;" type="checkbox"/>
+                    <p class="text-sm font-medium">Claude 3.5 Sonnet</p>
+                </div>
+                <span class="material-symbols-outlined text-text-secondary hover:text-light-grey text-[18px] cursor-grab">drag_handle</span>
+            </label>
+            <label class="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <input checked="" class="text-primary-light border-surface-border" style="--primary: #D4882F;" type="checkbox"/>
+                    <p class="text-sm font-medium">Llama 3</p>
+                </div>
+                <span class="material-symbols-outlined text-text-secondary hover:text-light-grey text-[18px] cursor-grab">drag_handle</span>
+            </label>
+            <label class="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <input class="text-primary-light border-surface-border" style="--primary: #D4882F;" type="checkbox"/>
+                    <p class="text-sm font-medium">GPT-3.5 Turbo</p>
+                </div>
+                <span class="material-symbols-outlined text-text-secondary hover:text-light-grey text-[18px] cursor-grab">drag_handle</span>
+            </label>
+            <label class="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <input class="text-primary-light border-surface-border" style="--primary: #D4882F;" type="checkbox"/>
+                    <p class="text-sm font-medium">Mixtral 8x7B</p>
+                </div>
+                <span class="material-symbols-outlined text-text-secondary hover:text-light-grey text-[18px] cursor-grab">drag_handle</span>
+            </label>
+            <label class="flex items-center justify-between gap-3 px-3 py-2 rounded-lg hover:bg-surface-border text-light-grey/80 hover:text-light-grey transition-colors cursor-pointer">
+                <div class="flex items-center gap-3">
+                    <input class="text-primary-light border-surface-border" style="--primary: #D4882F;" type="checkbox"/>
+                    <p class="text-sm font-medium">Gemini 1.5 Flash</p>
+                </div>
+                <span class="material-symbols-outlined text-text-secondary hover:text-light-grey text-[18px] cursor-grab">drag_handle</span>
+            </label>
+        </div>
+        
+        <button class="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-surface-border bg-surface-dark px-4 py-2 text-sm font-medium text-light-grey hover:bg-surface-border transition-colors">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            Add Model
+        </button>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full min-w-0 relative">
+        <header class="h-16 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-surface-border bg-background-dark/95 backdrop-blur px-6 shrink-0 z-10">
+            <div class="flex items-center gap-4 text-light-grey">
+                <button class="text-light-grey hover:text-white transition-colors p-1 rounded-md hover:bg-surface-border" onclick="toggleSidebar()">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <button class="text-light-grey hover:text-white transition-colors p-1 rounded-md hover:bg-surface-border" onclick="toggleModelSelector()" title="Show model selector">
+                    <span class="material-symbols-outlined">view_sidebar</span>
+                </button>
+                <h2 class="text-light-grey text-lg font-bold leading-tight tracking-[-0.015em] flex items-center gap-2">
+                    <span class="text-text-secondary font-normal">Polyquery /</span> Response Comparison
+                </h2>
+            </div>
+            <div class="flex gap-3">
+                <button class="hidden sm:flex h-9 items-center justify-center gap-2 rounded-full border border-surface-border bg-surface-dark px-4 text-sm font-medium text-light-grey hover:bg-surface-border transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">tune</span>
+                    <span class="truncate">Parameters</span>
+                </button>
+                <button class="flex size-9 items-center justify-center rounded-full bg-surface-border text-light-grey hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">share</span>
+                </button>
+                <button class="flex size-9 items-center justify-center rounded-full bg-surface-border text-light-grey hover:bg-primary/20 transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                </button>
+            </div>
+        </header>
+        
+        <div class="flex-1 overflow-y-auto overflow-x-hidden scroll-smooth p-6 pb-40 relative">
+            <div class="sticky top-0 z-20 flex justify-center mb-6 pt-2">
+                <div class="flex items-center gap-3">
+                    <div class="flex p-1.5 bg-surface-dark/90 backdrop-blur-md rounded-full border border-surface-border shadow-lg">
+                        <button class="px-5 py-2 rounded-full bg-primary text-background-dark font-bold text-sm shadow-sm transition-all">GPT-4o</button>
+                        <button class="px-5 py-2 rounded-full text-text-secondary hover:text-light-grey font-medium text-sm transition-colors">Claude 3.5 Sonnet</button>
+                        <button class="px-5 py-2 rounded-full text-text-secondary hover:text-light-grey font-medium text-sm transition-colors">Llama 3</button>
+                    </div>
+                    <div class="p-1.5 bg-surface-dark/90 backdrop-blur-md rounded-full border border-surface-border shadow-lg h-full flex items-center justify-center aspect-square w-[52px]">
+                        <button class="flex items-center justify-center text-text-secondary hover:text-light-grey transition-colors" title="Side-by-side view">
+                            <span class="material-symbols-outlined text-2xl">view_column</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-[1400px] mx-auto w-full flex flex-col gap-6">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-light-grey tracking-tight text-xl font-bold leading-tight">Model Comparison Results</h3>
+                    <span class="text-text-secondary text-sm">3 models run successfully</span>
+                </div>
+                
+                <div class="flex flex-col rounded-3xl border border-surface-border bg-surface-dark overflow-hidden flex-1 min-h-[500px] shadow-lg">
+                    <div class="p-6 bg-surface-dark border-b border-surface-border flex flex-col gap-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="size-2.5 rounded-full bg-primary shadow-[0_0_10px_rgba(212,136,47,0.6)]"></div>
+                                <p class="text-light-grey text-lg font-bold tracking-tight">GPT-4o</p>
+                            </div>
+                            <div class="px-3 py-1 rounded-full text-[11px] font-mono bg-primary/10 text-primary-light border border-primary/20 tracking-wide uppercase font-semibold">LATEST</div>
+                        </div>
+                        <div class="flex items-center gap-6 text-sm font-mono text-text-secondary pt-1">
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-background-dark/50 rounded-lg border border-surface-border/50" title="Latency">
+                                <span class="material-symbols-outlined text-[16px] text-muted-grey">timer</span>
+                                <span class="text-light-grey">1.2s</span>
+                            </div>
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-background-dark/50 rounded-lg border border-surface-border/50" title="Cost">
+                                <span class="material-symbols-outlined text-[16px] text-muted-grey">attach_money</span>
+                                <span class="text-light-grey">0.03</span>
+                            </div>
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-background-dark/50 rounded-lg border border-surface-border/50" title="Quality Score">
+                                <span class="material-symbols-outlined text-[16px] text-primary">thumb_up</span>
+                                <span class="text-primary font-bold">98%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 text-light-grey text-base leading-relaxed markdown-body max-w-none">
+                        <p class="text-light-grey/90">Here are two Python functions to calculate the Fibonacci sequence: one using recursion and one using iteration.</p>
+                        
+                        <h3 class="text-lg font-bold text-light-grey mt-6 mb-3">Recursive Approach</h3>
+                        <div class="code-block bg-[#1E1E1E] border border-[#333] rounded-xl p-5 shadow-inner">
+                            <span class="text-primary-light">def</span> <span class="text-blue-400">fib_recursive</span>(n):<br/>
+                            &nbsp;&nbsp;<span class="text-primary-light">if</span> n &lt;= 1:<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-primary-light">return</span> n<br/>
+                            &nbsp;&nbsp;<span class="text-primary-light">else</span>:<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-primary-light">return</span> fib_recursive(n-1) + fib_recursive(n-2)
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-light-grey mt-6 mb-3">Iterative Approach</h3>
+                        <div class="code-block bg-[#1E1E1E] border border-[#333] rounded-xl p-5 shadow-inner">
+                            <span class="text-primary-light">def</span> <span class="text-blue-400">fib_iterative</span>(n):<br/>
+                            &nbsp;&nbsp;a, b = 0, 1<br/>
+                            &nbsp;&nbsp;<span class="text-primary-light">for</span> _ <span class="text-primary-light">in</span> <span class="text-primary-light">range</span>(n):<br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;a, b = b, a + b<br/>
+                            &nbsp;&nbsp;<span class="text-primary-light">return</span> a
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-light-grey mt-6 mb-3">Complexity Analysis</h3>
+                        <ul class="text-light-grey/80 space-y-1">
+                            <li><strong class="text-light-grey">Recursive:</strong> O(2^n) time complexity due to repeated calculations. O(n) space complexity for the call stack.</li>
+                            <li><strong class="text-light-grey">Iterative:</strong> O(n) time complexity. O(1) space complexity.</li>
+                        </ul>
+                        <p class="text-light-grey/90 mt-4">The iterative approach is significantly more efficient for large 'n'.</p>
+                    </div>
+                    
+                    <div class="mt-auto p-4 border-t border-surface-border flex justify-end gap-3 bg-surface-dark/50 backdrop-blur-sm">
+                        <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface-border text-text-secondary hover:text-light-grey transition-colors text-sm" title="Copy">
+                            <span class="material-symbols-outlined text-[18px]">content_copy</span> Copy
+                        </button>
+                        <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface-border text-text-secondary hover:text-light-grey transition-colors text-sm" title="Expand">
+                            <span class="material-symbols-outlined text-[18px]">open_in_full</span> Expand
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-4">
+                    <div class="rounded-2xl bg-surface-dark border border-surface-border p-6 flex flex-col gap-4 shadow-md">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-green-500/10 p-2 rounded-full text-green-500">
+                                <span class="material-symbols-outlined">check_circle</span>
+                            </div>
+                            <h4 class="text-light-grey font-bold text-lg">Consensus Highlights</h4>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-sm text-text-secondary group">
+                                <div class="mt-0.5 min-w-[18px] flex justify-center">
+                                    <span class="material-symbols-outlined text-green-500 text-[18px]">check</span>
+                                </div>
+                                <span class="group-hover:text-light-grey transition-colors">All models correctly identified the exponential O(2^n) complexity of the recursive approach.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm text-text-secondary group">
+                                <div class="mt-0.5 min-w-[18px] flex justify-center">
+                                    <span class="material-symbols-outlined text-green-500 text-[18px]">check</span>
+                                </div>
+                                <span class="group-hover:text-light-grey transition-colors">All models implemented the iterative solution using O(n) time complexity.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm text-text-secondary group">
+                                <div class="mt-0.5 min-w-[18px] flex justify-center">
+                                    <span class="material-symbols-outlined text-green-500 text-[18px]">check</span>
+                                </div>
+                                <span class="group-hover:text-light-grey transition-colors">Consistent recommendation to use the iterative approach for larger values of 'n'.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="rounded-2xl bg-surface-dark border border-surface-border p-6 flex flex-col gap-4 shadow-md">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-primary/10 p-2 rounded-full text-primary">
+                                <span class="material-symbols-outlined">warning</span>
+                            </div>
+                            <h4 class="text-light-grey font-bold text-lg">Conflicts / Divergence</h4>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-sm text-text-secondary group">
+                                <div class="mt-0.5 min-w-[18px] flex justify-center">
+                                    <span class="material-symbols-outlined text-primary text-[18px]">priority_high</span>
+                                </div>
+                                <span class="group-hover:text-light-grey transition-colors"><strong class="text-light-grey">Llama 3</strong> provided a more condensed, less readable Python syntax compared to GPT-4o and Claude.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm text-text-secondary group">
+                                <div class="mt-0.5 min-w-[18px] flex justify-center">
+                                    <span class="material-symbols-outlined text-primary text-[18px]">priority_high</span>
+                                </div>
+                                <span class="group-hover:text-light-grey transition-colors"><strong class="text-light-grey">GPT-4o</strong> explicitly mentioned space complexity O(n) for recursion stack, while Llama 3 omitted space complexity analysis.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 w-full z-20 pointer-events-none pb-8 px-6 flex justify-center">
+            <div class="pointer-events-auto w-full max-w-3xl">
+                <div class="relative flex w-full items-end gap-2 rounded-[32px] bg-surface-dark border border-surface-border p-2 shadow-2xl ring-1 ring-white/5 transition-all focus-within:ring-primary/50 focus-within:border-primary/50">
+                    <button class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-text-secondary hover:bg-surface-border hover:text-light-grey transition-colors mb-0.5 ml-1" title="Add Attachment">
+                        <span class="material-symbols-outlined text-2xl">add</span>
+                    </button>
+                    <textarea class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden bg-transparent text-light-grey focus:outline-none border-none py-3 px-2 placeholder:text-text-secondary/60 text-lg font-normal leading-normal max-h-40" placeholder="Ask Polyquery" rows="1" style="min-height: 48px;"></textarea>
+                    <button class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-background-dark shadow-md hover:scale-105 active:scale-95 transition-all mb-0.5 mr-1 hover:bg-primary-dark" title="Send Message">
+                        <span class="material-symbols-outlined text-2xl">arrow_upward</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Link to external JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

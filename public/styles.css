@@ -1,0 +1,145 @@
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1A1A1A;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #474747;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #D4882F;
+}
+
+/* Code Block Styles */
+.code-block {
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    background-color: #232323;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #D1D1D1;
+    border: 1px solid #474747;
+}
+
+/* Markdown Body Styles */
+.markdown-body p {
+    margin-bottom: 1rem;
+}
+
+.markdown-body h3 {
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #D1D1D1;
+}
+
+.markdown-body ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Sidebar Transitions */
+#sidebar {
+    transition: width 0.3s ease, transform 0.3s ease, padding 0.3s ease;
+}
+
+#sidebar.collapsed {
+    width: 0;
+    overflow: hidden;
+    padding: 0;
+    border-right: none;
+}
+
+/* Mobile Sidebar */
+@media (max-width: 768px) {
+    #sidebar {
+        position: absolute;
+        z-index: 50;
+        transform: translateX(-100%);
+        width: 16rem;
+        height: 100%;
+    }
+    
+    #sidebar.mobile-open {
+        transform: translateX(0);
+        padding: 1rem;
+        border-right-width: 1px;
+    }
+}
+
+/* Model Selector Transitions */
+#model-selector {
+    transition: width 0.3s ease, transform 0.3s ease, padding 0.3s ease;
+}
+
+#model-selector.collapsed {
+    width: 0;
+    overflow: hidden;
+    padding: 0;
+    border-right: none;
+}
+
+/* Custom Checkbox Styles */
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.25em;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: transform 0.15s;
+    box-shadow: inset 1em 1em var(--primary);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 60%);
+}
+
+input[type="checkbox"]:checked {
+    background-color: transparent;
+    border-color: var(--primary);
+}
+
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
+input[type="checkbox"]:focus {
+    outline: max(2px, 0.15em) solid var(--primary);
+    outline-offset: max(2px, 0.15em);
+}
+
+/* Hide toggle buttons when sidebars are open */
+#sidebar:not(.collapsed) ~ main .sidebar-toggle {
+    display: none;
+}
+
+#model-selector:not(.collapsed) ~ main .model-selector-toggle {
+    display: none;
+}
+
+
