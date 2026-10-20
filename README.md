@@ -58,7 +58,3 @@ polyquery/
 2. Enter your prompt
 3. Click Send
 4. View responses in tabs or click the Side-by-Side button for grid view
-
-## License
-
-MIT
